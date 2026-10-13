@@ -1,0 +1,7 @@
+not ok 1 - every search result carries its title, version and validity window
+not ok 2 - archived versions are labelled, limited to one and ranked after current sources
+ok 3 - no document contributes more than two chunks to one answer
+ok 4 - customers never retrieve internal procedures
+not ok 5 - answer instructions require evidence and forbid estimates
+# pass 2
+# fail 3

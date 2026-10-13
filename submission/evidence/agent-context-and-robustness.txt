@@ -1,0 +1,29 @@
+Agent context, retrieval and robustness: evidence (live probes against gpt-6-luna, new conversation each)
+
+1) Document chunking (src/ingestion/chunker.ts, pipeline.ts)
+  BEFORE: fixed 650-char slices: 356 chunks; the 'Terms and exceptions' section split across chunks in 44/80 documents; 168 cuts inside a word; CSV notices indexed with raw quotes; HTML <br> lost.
+  AFTER : one chunk per section, long sections split at paragraph/sentence boundaries: 480 chunks (170-823 chars); terms section split in 0/80 documents; every chunk starts with title, id, version and validity. Index re-embedded and exported (fixtures/embeddings/index.json.gz).
+
+2) Customer profile + own-product retrieval (src/agent/context.ts, src/retrieval/search.ts)
+  [lucia http 200 3.946449s]
+  USER: How much is my monthly fee?
+  ASSISTANT: Your Aurora monthly fee is **€6**. It’s waived to **€0** if, in the same month, you receive a salary payment of at least **€1,200** and make **three settled card purchases**. If either condition isn’t met, the €6 fee applies. Transfers from your own account don’t count as salary payments. [aurora-fees-2026 v2]
+  [hugo http 200 1.604949s]
+  USER: How much is my monthly fee?
+  ASSISTANT: Your Horizon account’s monthly fee is €3 per calendar month. [horizon-fees-2026 v2]
+  [hugo http 200 3.520813s]
+  USER: What is the Aurora monthly fee?
+  ASSISTANT: The Aurora monthly fee is €6. It’s waived to €0 if, in the same month, you receive a salary payment of at least €1,200 and make three settled card purchases. Both conditions must be met; a transfer from your own account doesn’t count as salary. [aurora-fees-2026 v2]
+
+3) No documentation: transparent, offers support, opens a case only on acceptance (src/agent/prompt.ts, run.ts, tools.ts)
+  [elena http 200 4.232443s]
+  USER: Does Banana Bank offer travel insurance and how much does it cost?
+  ASSISTANT: Banana Bank’s published information doesn’t say whether travel insurance is offered or what it costs. I can connect you with a human support agent if you’d like.
+  [carla http 200 3.945540s]
+  USER: Do you offer mortgages?
+  ASSISTANT: Banana Bank’s published information doesn’t cover whether it offers mortgages. I can connect you with human support if you’d like.
+  incidents before=17 after=17 (no case opened by these questions)
+  elena follow-up: 'Yes please, connect me with someone' -> case opened: 'Customer asks whether Banana Bank offers travel insurance and its cost; published information does not cover this. Customer accepted human support.'
+  BEFORE (same question): 'The current travel documents surfaced, but their available excerpts don't provide those details.'
+
+4) Tests: npm test 38/38 (new: tests/amount.test.ts x2; transfers: interrupted dispatch, repeated request_human); npm run typecheck OK.

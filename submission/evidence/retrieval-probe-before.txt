@@ -1,0 +1,3 @@
+# Starter ranking (plain cosine top-5 over the supplied index), probe = chunk embedding
+archived-aurora-terms archive-aurora-1(no-title), archive-aurora-9(no-title), archive-family-5(no-title), archive-travel-4(no-title), archive-cloud-11(no-title)
+current-aurora-terms aurora-fees-2026(no-title), family-fees-2026(no-title), travel-fees-2026(no-title), aurora-conditions-2026(no-title), aurora-operations-2026(no-title)

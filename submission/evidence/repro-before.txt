@@ -1,0 +1,50 @@
+### B1 lost-response => duplicated transfer + status 'failed'
+{"id":1,"profile":"lost-response","seed":17,"counter":0,"read_failures":0}
+  bank operations: 2 | scenario: {'id': 1, 'profile': 'lost-response', 'seed': 17, 'counter': 0, 'read_failures': 0}
+   acc-bruno 448050
+   acc-lucia 400750
+{"status":"completed","operation":{"fromAccountId":"acc-lucia","toAccountId":"acc-bruno","amountCents":1000,"concept":"Test 1000","id":"625e19e4-6c51-47d5-8c9f-e6849e71bc80","userId":"lucia","reference":"1825240f-81c9-4197-ab8d-720386fd8789","createdAt":"2026-10-11T08:58:53.221Z","status":"completed","replay":false},"intentId":"4b41e7fe-c082-443a-9146-3b6b3db7ed01"}
+  bank operations: 4 | scenario: {'id': 1, 'profile': 'lost-response', 'seed': 17, 'counter': 2, 'read_failures': 0}
+   acc-bruno 450050
+   acc-lucia 398750
+
+### B1b slow-response (2.6s > app timeout 1.4s) => duplicate
+{"id":1,"profile":"slow-response","seed":17,"counter":0,"read_failures":0}
+  bank operations: 4 | scenario: {'id': 1, 'profile': 'slow-response', 'seed': 17, 'counter': 0, 'read_failures': 0}
+   acc-bruno 450050
+   acc-lucia 398750
+{"status":"completed","operation":{"fromAccountId":"acc-lucia","toAccountId":"acc-bruno","amountCents":1100,"concept":"Test 1100","id":"917b4f54-bc6e-4450-a73d-382aca5b2dd4","userId":"lucia","reference":"ccb68e74-87f7-40c6-bb5b-749a7ecfef5d","createdAt":"2026-10-11T08:58:54.720Z","status":"completed","replay":false},"intentId":"f64609ac-ec43-4716-b472-af6a82cec138"}
+  bank operations: 6 | scenario: {'id': 1, 'profile': 'slow-response', 'seed': 17, 'counter': 2, 'read_failures': 0}
+   acc-bruno 452250
+   acc-lucia 396550
+
+### B2 no confirmation: transfer_money executes immediately (normal profile)
+{"id":1,"profile":"normal","seed":17,"counter":0,"read_failures":0}
+{"status":"completed","operation":{"fromAccountId":"acc-lucia","toAccountId":"acc-bruno","amountCents":1200,"concept":"Test 1200","id":"f97669bf-d91b-498b-a47f-a3f0eb46250f","userId":"lucia","reference":"652cf56b-1834-4ad2-ac7f-b2c5747d005c","createdAt":"2026-10-11T08:58:57.796Z","status":"completed","replay":false},"intentId":"aa789242-54bd-4ed0-8deb-4fc95e7c73a3"}
+
+### B3 retrying the same intentId after a failure re-sends with a new reference
+{"id":1,"profile":"lost-response","seed":17,"counter":0,"read_failures":0}
+{"status":"completed","operation":{"fromAccountId":"acc-lucia","toAccountId":"acc-bruno","amountCents":1300,"concept":"Test 1300","id":"2dbba39a-1c6c-49e1-9dd1-3e9cc5b4d850","userId":"lucia","reference":"f437d03f-2cbd-449b-9192-b1c2a6a1d1b2","createdAt":"2026-10-11T08:58:57.837Z","status":"completed","replay":false},"intentId":"intent-fixed-1"}
+  bank operations: 9 | scenario: {'id': 1, 'profile': 'lost-response', 'seed': 17, 'counter': 2, 'read_failures': 0}
+   acc-bruno 456050
+   acc-lucia 392750
+{"status":"completed","operation":{"fromAccountId":"acc-lucia","toAccountId":"acc-bruno","amountCents":1300,"concept":"Test 1300","id":"99d46aa4-f3ab-4bd9-89b0-346716d3c43b","userId":"lucia","reference":"6bcdfb49-1838-4dc8-8c2c-2300a52ac112","createdAt":"2026-10-11T08:58:57.894Z","status":"completed","replay":false},"intentId":"intent-fixed-1"}
+  bank operations: 10 | scenario: {'id': 1, 'profile': 'lost-response', 'seed': 17, 'counter': 3, 'read_failures': 0}
+   acc-bruno 457350
+   acc-lucia 391450
+
+### B4 approvals/:id/confirm (no approvals ever created)
+  approvals: []
+
+### B5 operator case detail is empty (history/events/intents/bank)
+{"incident":{"id":"case-lucia","user_id":"lucia","conversation_id":"conv-lucia-support","summary":"Could someone check the dinner payment with Bruno when available?","status":"open","created_at":"2026-09-23T16:40:00.000Z"},"customer":{"id":"lucia","name":"Lucía Martín","role":"customer","initials":"LM","color":"#a6b5fa"},"lastMessage":{"id":"conv-lucia-support-message-2","conversation_id":"conv-lucia-support","role":"user","content":"Could someone check the dinner payment with Bruno when available?","created_at":"2026-09-23T16:40:20.000Z","run_id":null},"history":[],"events":[],"intents":[],"bank":null}
+
+### B6 operation_status for historic lucia reference while app says failed
+{"id":1,"profile":"normal","seed":17,"counter":0,"read_failures":0}
+{"id":"op-historic-lucia","userId":"lucia","reference":"ref-historic-lucia","fromAccountId":"acc-lucia","toAccountId":"acc-bruno","amountCents":8500,"concept":"Team dinner","createdAt":"2026-09-23T16:41:12.000Z","status":"completed"}
+
+### B7 intent with same id but other user => leaks 409 vs ownership
+{"status":"failed","error":"This intent belongs to a different payload."}
+
+### B8 insufficient funds message (Diego)
+{"status":"failed","error":"Insufficient funds.","intentId":"4622d234-06c0-4119-8e41-c104987b3ce5"}

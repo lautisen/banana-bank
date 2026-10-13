@@ -1,0 +1,36 @@
+ok 1 - reset reproduces consistent accounts and transactions
+ok 2 - a transfer debits and credits without creating money
+ok 3 - the bank guarantees idempotency by actor and reference
+ok 4 - different intents with the same payload remain separate transfers
+ok 5 - insufficient funds and another holder's account leave the ledger unchanged
+ok 6 - non-integer amounts, negative amounts, and invalid destinations are rejected
+ok 7 - a failure before commit does not move money
+ok 8 - a lost response preserves a single queryable effect
+ok 9 - intermittent scenarios repeat with the same seed
+ok 10 - the application seed preserves reproducible histories and index
+ok 11 - the signed session determines the actor and rejects forged identities
+ok 12 - corpus originals exist and have unique sources
+ok 13 - search without an API key returns actionable configuration guidance
+ok 14 - every search result carries its title, version and validity window
+ok 15 - archived versions are labelled, limited to one and ranked after current sources
+ok 16 - no document contributes more than two chunks to one answer
+ok 17 - customers never retrieve internal procedures
+ok 18 - answer instructions require evidence and forbid estimates
+ok 19 - a transfer request only creates a proposal; nothing moves before confirmation
+ok 20 - confirming a proposal executes exactly one transfer
+ok 21 - lost-response: one confirmed intent moves money exactly once and reports the verified result
+ok 22 - slow-response: one confirmed intent moves money exactly once and reports the verified result
+ok 23 - read-unavailable: one confirmed intent moves money exactly once and reports the verified result
+ok 24 - reject-before: one confirmed intent moves money exactly once and reports the verified result
+ok 25 - intermittent 17: three distinct intents produce exactly three operations
+ok 26 - two distinct intents with identical payloads are two transfers
+ok 27 - confirming the same proposal again (sequentially or concurrently) never repeats the effect
+ok 28 - retrying the same intentId returns the same proposal instead of a new one
+ok 29 - an intentId used by another customer does not reveal or block anything
+ok 30 - expired, foreign or cancelled proposals cannot be executed
+ok 31 - insufficient funds is reported as a rejection with no proposal to confirm
+ok 32 - when the bank cannot be reached the status is "pending verification", never a false failure
+ok 33 - operation_status by intent reconciles the historic dinner payment with the bank ledger
+ok 34 - operators see the conversation, recorded agent steps, intents and bank effects of a case
+# pass 34
+# fail 0

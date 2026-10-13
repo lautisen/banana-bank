@@ -1,0 +1,18 @@
+not ok 1 - a transfer request only creates a proposal; nothing moves before confirmation
+not ok 2 - confirming a proposal executes exactly one transfer
+not ok 3 - lost-response: one confirmed intent moves money exactly once and reports the verified result
+not ok 4 - slow-response: one confirmed intent moves money exactly once and reports the verified result
+not ok 5 - read-unavailable: one confirmed intent moves money exactly once and reports the verified result
+not ok 6 - reject-before: one confirmed intent moves money exactly once and reports the verified result
+not ok 7 - intermittent 17: three distinct intents produce exactly three operations
+not ok 8 - two distinct intents with identical payloads are two transfers
+not ok 9 - confirming the same proposal again (sequentially or concurrently) never repeats the effect
+not ok 10 - retrying the same intentId returns the same proposal instead of a new one
+not ok 11 - an intentId used by another customer does not reveal or block anything
+not ok 12 - expired, foreign or cancelled proposals cannot be executed
+not ok 13 - insufficient funds is reported as a rejection with no proposal to confirm
+not ok 14 - when the bank cannot be reached the status is "pending verification", never a false failure
+not ok 15 - operation_status by intent reconciles the historic dinner payment with the bank ledger
+not ok 16 - operators see the conversation, recorded agent steps, intents and bank effects of a case
+# pass 0
+# fail 16

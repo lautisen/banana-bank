@@ -1,0 +1,21 @@
+Customer-facing error messages: before / after
+Setup: npm run dev without OPENAI_API_KEY, customer Lucía, new chat, "What accounts do I have?"
+
+BEFORE (assistant bubble, and the same text repeated in a red alert)
+  I could not complete the request: Set OPENAI_API_KEY in .env.local or the environment
+  to use the agent and semantic search, then restart the services.
+
+AFTER
+  POST /api/conversations/:id/messages -> 502
+    {"error":"Sorry, I can't answer right now. Please try again in a few minutes or ask for human support.","code":"assistant_unavailable"}
+  Conversation:
+    user : What accounts do I have?
+    assistant : Sorry, I can't answer right now. Please try again in a few minutes or ask for human support.
+  (no duplicate alert in the UI)
+  Server log (operator only):
+    agent_run_failed 994b27e9-2fb1-478d-81f1-7a5f7cacfcde Set OPENAI_API_KEY in .env.local or the environment to use the agent and semantic search, then restart the services.
+  The technical detail is also kept in runs.error for that run.
+
+Document search without a key: the UI shows "This feature is temporarily unavailable.
+Please try again later." The API still returns code missing_openai_api_key with the
+configuration guidance (required by tests/invariants.test.ts).

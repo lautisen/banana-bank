@@ -1,0 +1,15 @@
+First-run check (README "First-run check"), 2026-10-11
+Commit: 18e0bec, clean git worktree, fresh setup + reset (seed 47 conversations, 17 incidents, index loaded)
+Node v25.6.1, npm 11.9.0, macOS arm64
+
+npm run typecheck: OK. npm test: 83 pass, 0 fail.
+
+1. npm run doctor: chatModel gpt-6-luna, reply "connection successful", embedding dimensions 1536
+2. npm run dev: /api/health ok, keyConfigured true
+3. Lucía: 2 accounts (Aurora account 4,007.50 EUR; Personal savings 1,000.00 EUR); document library loads (68 current documents visible)
+4. New chat, "What accounts do I have?" (~5 s):
+   "You have two accounts:
+    - Aurora account — balance €4,007.50
+    - Personal savings — balance €1,000.00"
+   Matches bank balances.
+5. Marta: 17 support cases, 9 open and 8 closed (resolved)
