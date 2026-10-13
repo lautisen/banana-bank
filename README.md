@@ -1,5 +1,7 @@
 # Banana Bank Technical Challenge
 
+This is part of a hackathon project.
+
 Banana Bank is a fictional bank with an AI assistant. You receive a working application with customer history and room for improvement. The challenge has two parts: assess and improve readiness for a Monday launch, then design and implement a useful, differentiating improvement to the agent or its agentic workflow. Read the [challenge brief](docs/challenge.md) ([PDF](docs/challenge.pdf)), investigate the product, and submit demonstrable improvements in a ZIP containing the complete project.
 
 ## Before you start
