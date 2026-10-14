@@ -1,6 +1,34 @@
-# Banana Bank Technical Challenge
+# Banana Bank: launch-readiness audit and Ulises
 
-This is part of a hackathon project.
+My solution to a two-part technical challenge. Banana Bank is a fictional bank with an AI assistant that has to go live on a Monday. Part 1 was finding what would break in production and fixing it with evidence; part 2 was adding a feature that makes the assistant genuinely useful.
+
+**Full write-up, evidence and how to try it: [submission/README.md](submission/README.md).**
+
+## Part 1: what would have broken on Monday
+
+| Problem | Fix |
+|---|---|
+| A retry after a lost or slow bank response got a new reference, so one transfer could become two | One reference per intent, stored before the first send and reused on every retry; the bank replays instead of re-executing |
+| The same transfer could be confirmed twice, sequentially or concurrently | The proposal is consumed and the intent claimed atomically; repeated confirmations return the stored state |
+| Timeouts were reported as failures even when the money had moved | Statuses come from verified facts (`completed`, `rejected`, `not_executed`, `pending_verification`) and are reconciled against the bank |
+| The operator case view was empty and telemetry dropped arguments and results | Operators see the conversation, recorded steps, intents and bank operations, with gaps flagged instead of guessed |
+| The assistant was told to fill gaps with "common banking practices", and retrieval mixed archived policy versions | Evidence-only cited answers; every chunk carries title, version and validity; current sources first |
+
+Each fix has a reproduction before and a test after (`submission/evidence/`, `tests/`).
+
+## Part 2: Ulises, protection against payment pressure
+
+The payments that hurt most are the ones customers authorise themselves under pressure: a fake bank call asking to move money to a "safe account", or a rushed decision. Ulises scores every transfer proposal from 0 to 100 with named, testable reasons, and adds friction only when needed: nothing for everyday payments, a hold when there is a scam script or when a rule the customer wrote while calm applies. It also adds chat guardrails, abuse control and a handoff to a human operator.
+
+<p align="center"><img src="submission/evidence/screenshots/ulises-3-scam-shield.png" width="640" alt="Ulises holding a 1,000 EUR transfer after detecting a scam script, with the reasons behind its 100/100 score"></p>
+
+**Stack:** Next.js, TypeScript, SQLite (better-sqlite3), an OpenAI agent with tools, Node test runner (85 tests), Playwright for the UI walkthrough. Built with Claude Code; the complete AI sessions are in [`submission/ai-sessions/`](submission/ai-sessions/).
+
+---
+
+## Original challenge brief
+
+The rest of this README is the starter's original documentation, kept so the project can be run as delivered.
 
 Banana Bank is a fictional bank with an AI assistant. You receive a working application with customer history and room for improvement. The challenge has two parts: assess and improve readiness for a Monday launch, then design and implement a useful, differentiating improvement to the agent or its agentic workflow. Read the [challenge brief](docs/challenge.md) ([PDF](docs/challenge.pdf)), investigate the product, and submit demonstrable improvements in a ZIP containing the complete project.
 
